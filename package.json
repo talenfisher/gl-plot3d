@@ -7,27 +7,27 @@
     "example": "example"
   },
   "dependencies": {
-    "3d-view-controls": "^2.2.0",
+    "3d-view-controls": "^2.2.2",
     "a-big-triangle": "^1.0.0",
     "gl-axes3d": "^1.4.0",
     "gl-fbo": "^2.0.3",
     "gl-mat4": "^1.1.2",
     "gl-select-static": "git://github.com/gl-vis/gl-select-static.git#7ee3db7a02606fb7e658f4fa2bbc7ead632d7968",
     "gl-shader": "^4.2.1",
-    "gl-spikes3d": "^1.0.3",
-    "glslify": "^6.1.0",
+    "gl-spikes3d": "^1.0.6",
+    "glslify": "^6.3.1",
     "is-mobile": "^2.0.0",
     "mouse-change": "^1.1.1",
-    "ndarray": "^1.0.16"
+    "ndarray": "^1.0.18"
   },
   "devDependencies": {
     "bunny": "^1.0.1",
     "dirichlet": "0.0.0",
     "enable-mobile": "^1.0.7",
-    "gl-line3d": "^1.1.5",
-    "gl-mesh3d": "^2.0.1",
-    "gl-scatter3d": "^1.0.15",
-    "gl-surface3d": "^1.3.7",
+    "gl-line3d": "git://github.com/gl-vis/gl-line3d.git#8a4db0b069814621b4613b927031ad0068d0dbc1",
+    "gl-mesh3d": "git://github.com/gl-vis/gl-mesh3d.git#931cbec5e8ce019c71fa526921b66471343cf8a8",
+    "gl-scatter3d": "git://github.com/gl-vis/gl-scatter3d.git#ca2b4e2789a174eb47b8b67f1351e14ac1c14dfe",
+    "gl-surface3d": "git://github.com/gl-vis/gl-surface3d.git#7cc81ad9adc23893d89e998019131d8e20dbbf51",
     "ndarray-fill": "git://github.com/archmoj/ndarray-fill.git#5f506a54e13954ed6175bc7ea3fc9816a811bac9",
     "simplicial-complex": "^1.0.0"
   },

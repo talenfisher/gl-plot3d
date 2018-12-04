@@ -353,9 +353,6 @@ function createScene(options) {
     if(buttons && prevButtons && !paintMode) {
       mouseRotating = true
     } else {
-      if(mouseRotating) {
-        pickDirty = true
-      }
       mouseRotating = false
 
       for(var i=0; i<numPick; ++i) {

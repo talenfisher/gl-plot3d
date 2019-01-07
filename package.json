@@ -14,7 +14,6 @@
     "gl-mat4": "^1.1.2",
     "gl-select-static": "^2.0.2",
     "gl-shader": "^4.2.1",
-    "gl-spikes3d": "^1.0.3",
     "is-mobile": "^0.2.2",
     "mouse-change": "^1.1.1",
     "ndarray": "^1.0.16"

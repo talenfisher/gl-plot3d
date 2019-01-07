@@ -1,6 +1,6 @@
 {
   "name": "@talenfisher/gl-plot3d",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Fork of gl-vis/gl-plot3d adapted for fix3p",
   "main": "scene.js",
   "directories": {

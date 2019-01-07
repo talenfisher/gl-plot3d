@@ -11,7 +11,7 @@ var createFBO    = require('gl-fbo')
 var drawTriangle = require('a-big-triangle')
 var mouseChange  = require('mouse-change')
 var perspective  = require('gl-mat4/perspective')
-var createShader = require('./lib/shader')
+var createShader = require('./shader')
 var isMobile = require('is-mobile')()
 
 function MouseSelect() {

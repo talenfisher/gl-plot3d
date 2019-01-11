@@ -3,9 +3,6 @@
 module.exports = createScene
 
 var createCamera = require('3d-view-controls')
-var createAxes   = require('gl-axes3d')
-var axesRanges   = require('gl-axes3d/properties')
-var createSpikes = require('gl-spikes3d')
 var createSelect = require('gl-select-static')
 var createFBO    = require('gl-fbo')
 var drawTriangle = require('a-big-triangle')
@@ -111,14 +108,6 @@ function createScene(options) {
     mode:    'turntable'
   }
 
-  //Create axes
-  var axesOptions = options.axes || {}
-  var axes = createAxes(gl, axesOptions)
-  axes.enable = !axesOptions.disable
-
-  //Create spikes
-  var spikeOptions = options.spikes || {}
-  var spikes = createSpikes(gl, spikeOptions)
 
   //Object list is empty initially
   var objects         = []
@@ -151,9 +140,6 @@ function createScene(options) {
     canvas:       canvas,
     selection:    selection,
     camera:       createCamera(canvas, cameraOptions),
-    axes:         axes,
-    axesPixels:   null,
-    spikes:       spikes,
     bounds:       bounds,
     objects:      objects,
     shape:        viewShape,
@@ -264,7 +250,6 @@ function createScene(options) {
     if(stopped) {
       return
     }
-    obj.axes = axes
     objects.push(obj)
     pickBufferIds.push(-1)
     dirty = true
@@ -303,8 +288,6 @@ function createScene(options) {
     }
 
     //Destroy objects
-    axes.dispose()
-    spikes.dispose()
     for(var i=0; i<objects.length; ++i) {
       objects[i].dispose()
     }
@@ -320,8 +303,6 @@ function createScene(options) {
 
     //Release all references
     gl = null
-    axes = null
-    spikes = null
     objects = []
   }
 
@@ -473,10 +454,6 @@ function createScene(options) {
     dirty     = dirty || cameraMoved
     pickDirty = pickDirty || cameraMoved
 
-      //Set pixel ratio
-    axes.pixelRatio   = scene.pixelRatio
-    spikes.pixelRatio = scene.pixelRatio
-
     //Check if any objects changed, recalculate bounds
     var numObjs = objects.length
     var lo = nBounds[0]
@@ -488,7 +465,6 @@ function createScene(options) {
 
       //Set the axes properties for each object
       obj.pixelRatio = scene.pixelRatio
-      obj.axes = scene.axes
 
       dirty = dirty || !!obj.dirty
       pickDirty = pickDirty || !!obj.dirty
@@ -541,23 +517,6 @@ function createScene(options) {
       return
     }
 
-    if(boundsChanged) {
-      var tickSpacing = [0,0,0]
-      for(var i=0; i<3; ++i) {
-        tickSpacing[i] = roundUpPow10((bounds[1][i]-bounds[0][i]) / 10.0)
-      }
-      if(axes.autoTicks) {
-        axes.update({
-          bounds: bounds,
-          tickSpacing: tickSpacing
-        })
-      } else {
-        axes.update({
-          bounds: bounds
-        })
-      }
-    }
-
     //Get scene
     var width  = gl.drawingBufferWidth
     var height = gl.drawingBufferHeight
@@ -599,32 +558,18 @@ function createScene(options) {
     for(var i=0; i<numObjs; ++i) {
       var obj = objects[i]
 
-      //Set axes bounds
-      obj.axesBounds = bounds
-
       //Set clip bounds
       if(scene.clipToBounds) {
         obj.clipBounds = bounds
       }
     }
-    //Set spike parameters
-    if(selection.object) {
-      if(scene.snapToData) {
-        spikes.position = selection.dataCoordinate
-      } else {
-        spikes.position = selection.dataPosition
-      }
-      spikes.bounds = bounds
-    }
+
 
     //If state changed, then redraw pick buffers
     if(pickDirty) {
       pickDirty = false
       renderPick()
     }
-
-    //Recalculate pixel data
-    scene.axesPixels = axesRanges(scene.axes, cameraParams, width, height)
 
     //Call render callback
     if(scene.onrender) {
@@ -653,20 +598,12 @@ function createScene(options) {
 
     //Render opaque pass
     var hasTransparent = false
-    if(axes.enable) {
-      hasTransparent = hasTransparent || axes.isTransparent()
-      axes.draw(cameraParams)
-    }
-    spikes.axes = axes
-    if(selection.object) {
-      spikes.draw(cameraParams)
-    }
+
 
     gl.disable(gl.CULL_FACE)  //most visualization surfaces are 2 sided
 
     for(var i=0; i<numObjs; ++i) {
       var obj = objects[i]
-      obj.axes = axes
       obj.pixelRatio = scene.pixelRatio
       if(obj.isOpaque && obj.isOpaque()) {
         obj.draw(cameraParams)
@@ -685,10 +622,6 @@ function createScene(options) {
       gl.depthMask(true)
       gl.depthFunc(gl.LESS)
 
-      //Render forward facing objects
-      if(axes.enable && axes.isTransparent()) {
-        axes.drawTransparent(cameraParams)
-      }
       for(var i=0; i<numObjs; ++i) {
         var obj = objects[i]
         if(obj.isOpaque && obj.isOpaque()) {
@@ -704,10 +637,6 @@ function createScene(options) {
       gl.depthMask(false)
       gl.clearColor(0,0,0,0)
       gl.clear(gl.COLOR_BUFFER_BIT)
-
-      if(axes.isTransparent()) {
-        axes.drawTransparent(cameraParams)
-      }
 
       for(var i=0; i<numObjs; ++i) {
         var obj = objects[i]
